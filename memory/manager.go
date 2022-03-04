@@ -40,10 +40,10 @@ func (e *Manager) Publish(msg *eventbus.Message) {
 	for _, cHandle := range e.Handles {
 		cHandle(msg)
 	}
+	e.mutex.Lock()
 	for _, oHandle := range e.HandlesOnce {
 		oHandle(msg)
 	}
-	e.mutex.Lock()
 	e.HandlesOnce = make([]eventbus.SubscribeHandler, 0)
 	e.mutex.Unlock()
 }
